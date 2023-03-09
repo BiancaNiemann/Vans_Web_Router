@@ -12,15 +12,17 @@ export default function Vans() {
     },[])
 
     const vanHtmlRender = vans.map(item => (
-            <div key={item.id} className="van-tile">
-                <img src={item.imageUrl}/>
-                <div className="van-info">
-                    <h4>{item.name}</h4>
-                    <h4>${item.price} <span>/day</span></h4>
-                </div>
+            <Link to={`/vans/${item.id}`}>
+                <div key={item.id} className="van-tile">
+                    <img src={item.imageUrl}/>
+                    <div className="van-info">
+                        <h4>{item.name}</h4>
+                        <h4>${item.price} <span>/day</span></h4>
+                    </div>
 
-                <i className={`van-type ${item.type} selected`}>{item.type}</i>
-            </div>
+                    <i className={`van-type ${item.type} selected`}>{item.type}</i>
+                </div>
+            </Link>
     ))
 
     return (
