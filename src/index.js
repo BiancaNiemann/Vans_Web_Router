@@ -26,10 +26,10 @@ import Error from './components/Error';
 import "./server"
 
 const router = createBrowserRouter(createRoutesFromElements(
-  <Route path="/" element={<Layout />} >
+  <Route path="/" element={<Layout errorElement={<Error />}/>} >
   <Route index element={<Home />} />
   <Route path="about" element={<About />} />
-  <Route path="vans" element={<Vans />} loader={vanPageLoader} errorElement={<Error />}/>
+  <Route path="vans" element={<Vans />} loader={vanPageLoader} />
   <Route path="vans/:id" element={<VanDetail />} />
 
   <Route path="host" element={<Host />}>
