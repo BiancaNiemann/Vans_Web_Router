@@ -1,18 +1,27 @@
 import React, {useState, useEffect} from "react"
-import {useParams} from "react-router-dom"
+import {useParams, Link, useLocation} from "react-router-dom"
 
 export default function VanDetail() {
     const [van, setVan] = useState([])
     const params = useParams()
-
+    const location = useLocation()
+    
     useEffect(()=> {
         fetch(`/api/vans/${params.id}`)
         .then(res => res.json())
         .then(data => setVan(data.vans))
     },[params.id])
 
+    const search = location.state?.search || ""
+
     return (
         <div className="van-detail-container">
+            <Link 
+                to={`..?${search}`}
+                relative="path"
+                className="back-button"
+            >&larr; <span>Back to all vans</span></Link>
+
             {van ? (
                 <div className="van-detail">
                     <img src={van.imageUrl} />

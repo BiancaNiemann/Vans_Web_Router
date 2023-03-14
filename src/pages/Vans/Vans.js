@@ -20,7 +20,7 @@ export default function Vans() {
         : vans
 
     const vanHtmlRender = displayedVans.map(item => (
-            <Link to={`/vans/${item.id}`} key={item.id}>
+            <Link to={item.id} key={item.id} state={{search: searchParams.toString()}}>
                 <div key={item.id} className="van-tile">
                     <img src={item.imageUrl}/>
                     <div className="van-info">
