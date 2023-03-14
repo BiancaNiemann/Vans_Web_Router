@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, useSearchParams, useLoaderData } from "react-router-dom"
+import { getVans } from "../api"
 
-
+export function loader(){
+    return getVans()
+}
 
 export default function Vans() {
+    const data = useLoaderData()
     const [searchParams, setSearchParams] = useSearchParams()
-    const [vans, setVans] = useState([])
-    
     const typeFilter = searchParams.get("type")
-    
-    useEffect(() => {
-        fetch("/api/vans")
-        .then(res => res.json())
-        .then(data => setVans(data.vans))
-    },[])
 
     const displayedVans = typeFilter
-        ? vans.filter(van => van.type.toLowerCase() === typeFilter)
-        : vans
+        ? data.filter(van => van.type.toLowerCase() === typeFilter)
+        : data
 
     const vanHtmlRender = displayedVans.map(item => (
-            <Link to={item.id} key={item.id} state={{search: searchParams.toString()}}>
+            <Link to={item.id} key={item.id} state={{
+                search: searchParams.toString(),
+                type: typeFilter
+                }}>
                 <div key={item.id} className="van-tile">
                     <img src={item.imageUrl}/>
                     <div className="van-info">
