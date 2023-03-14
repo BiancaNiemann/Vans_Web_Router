@@ -21,6 +21,7 @@ import HostVanPhotos from './pages/Host/HostVan/HostVanPhotos';
 import HostVanPricing from './pages/Host/HostVan/HostVanPricing';
 import HostVanInfo from './pages/Host/HostVan/HostVanInfo';
 import PageNotFound from './pages/PageNotFound';
+import Error from './components/Error';
 
 import "./server"
 
@@ -28,7 +29,7 @@ const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<Layout />} >
   <Route index element={<Home />} />
   <Route path="about" element={<About />} />
-  <Route path="vans" element={<Vans />} loader={vanPageLoader}/>
+  <Route path="vans" element={<Vans />} loader={vanPageLoader} errorElement={<Error />}/>
   <Route path="vans/:id" element={<VanDetail />} />
 
   <Route path="host" element={<Host />}>
