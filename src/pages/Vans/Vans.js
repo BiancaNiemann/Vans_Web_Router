@@ -1,19 +1,33 @@
-import React, { useEffect, useState } from "react"
-import { Link, useSearchParams, useLoaderData } from "react-router-dom"
+import React from "react"
+import { Link, useSearchParams, useLoaderData, defer, Await } from "react-router-dom"
 import { getVans } from "../api"
 
 export function loader(){
-    return getVans()
+    return defer({vans : getVans()})
 }
 
 export default function Vans() {
-    const data = useLoaderData()
+    const dataPromise = useLoaderData()
     const [searchParams, setSearchParams] = useSearchParams()
     const typeFilter = searchParams.get("type")
 
-    const displayedVans = typeFilter
-        ? data.filter(van => van.type.toLowerCase() === typeFilter)
-        : data
+
+
+    function handleFilterChange(key, value) {
+        setSearchParams(prevParams => {
+            if (value === null){
+                prevParams.delete(key)
+            } else {
+                prevParams.set(key, value)
+            }
+            return prevParams
+        })
+    }
+
+    function renderVans(vans) {
+        const displayedVans = typeFilter
+        ? vans.filter(van => van.type.toLowerCase() === typeFilter)
+        : vans
 
     const vanHtmlRender = displayedVans.map(item => (
             <Link to={item.id} key={item.id} state={{
@@ -31,48 +45,46 @@ export default function Vans() {
                 </div>
             </Link>
     ))
-
-    function handleFilterChange(key, value) {
-        setSearchParams(prevParams => {
-            if (value === null){
-                prevParams.delete(key)
-            } else {
-                prevParams.set(key, value)
-            }
-            return prevParams
-        })
-    }
+    return (
+        <>
+        <div className = "van-list-filter-buttons">
+            <button 
+                onClick = {() => handleFilterChange("type", "simple")}
+                className={`van-type simple ${typeFilter === "simple" ? "selected" : ""}`}
+            >Simple
+            </button>
+            <button 
+                onClick = {() => handleFilterChange("type", "luxury")}
+                className={`van-type luxury ${typeFilter === "luxury" ? "selected" : ""}`}
+            >Luxury
+            </button>
+            <button 
+                onClick = {() => handleFilterChange("type", "rugged")}
+                className={`van-type rugged ${typeFilter === "rugged" ? "selected" : ""}`}
+            >Rugged
+            </button>
+            {typeFilter ? (<button 
+                onClick = {() => handleFilterChange("type", null)}
+                className="van-type clear-filters"
+            >
+            Clear Filters
+            </button>) : null}
+        </div>
+        <div className="van-list">
+            {vanHtmlRender}
+        </div>
+    </>
+    )
+}
 
     return (
         <div className="van-list-container">
             <h1>Explore our Van options</h1>
-            <div className = "van-list-filter-buttons">
-                <button 
-                    onClick = {() => handleFilterChange("type", "simple")}
-                    className={`van-type simple ${typeFilter === "simple" ? "selected" : ""}`}
-                >Simple
-                </button>
-                <button 
-                    onClick = {() => handleFilterChange("type", "luxury")}
-                    className={`van-type luxury ${typeFilter === "luxury" ? "selected" : ""}`}
-                >Luxury
-                </button>
-                <button 
-                    onClick = {() => handleFilterChange("type", "rugged")}
-                    className={`van-type rugged ${typeFilter === "rugged" ? "selected" : ""}`}
-                >Rugged
-                </button>
-                {typeFilter ? (<button 
-                    onClick = {() => handleFilterChange("type", null)}
-                    className="van-type clear-filters"
-                >
-                Clear Filters
-                </button>) : null}
+            <Await resolve={dataPromise.vans}>
+                {renderVans}
+               
+            </Await>
 
-            </div>
-            <div className="van-list">
-                {vanHtmlRender}
-            </div>
         </div>
 
     )
