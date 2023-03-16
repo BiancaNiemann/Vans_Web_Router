@@ -29,15 +29,9 @@ export default function HostVans() {
 
     return (
         <div className="host-vans-list">
-            {
-                vans.length > 0 ? (
-                    <section>
-                        {HostVanHtmlRender}
-                    </section>
-                    ) : (
-                        <h2>Loading...</h2>
-                    )
-                }
+            <section>
+                {HostVanHtmlRender}
+            </section>
             </div>
         )
     }  

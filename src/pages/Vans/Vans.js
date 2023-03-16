@@ -11,8 +11,6 @@ export default function Vans() {
     const [searchParams, setSearchParams] = useSearchParams()
     const typeFilter = searchParams.get("type")
 
-
-
     function handleFilterChange(key, value) {
         setSearchParams(prevParams => {
             if (value === null){

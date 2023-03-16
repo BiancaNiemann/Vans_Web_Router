@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, NavLink } from "react-router-dom"
+import { BiUserCircle } from "react-icons/bi"
 
 export default function Header(){
     const isActiveStyle ={
@@ -34,7 +35,7 @@ export default function Header(){
           <Link 
             to="login" 
             className="login-link">
-            User   
+            <BiUserCircle  /> 
           </Link>
           <button onClick={fakeLogOut}>X</button>
         </nav>
